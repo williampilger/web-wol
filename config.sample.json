@@ -1,0 +1,26 @@
+{
+  "timeout": 2000,
+  "users": [
+    {
+      "id": "admin",
+      "password": "sua_senha_aqui",
+      "groups": ["escritorio", "servidores"]
+    }
+  ],
+  "groups": [
+    {
+      "id": "escritorio",
+      "name": "Escritório",
+      "description": "Máquinas do escritório principal"
+    }
+  ],
+  "machines": [
+    {
+      "id": "pc-01",
+      "name": "PC Principal",
+      "ip": "192.168.1.100",
+      "mac": "00:11:22:33:44:55",
+      "groups": ["escritorio"]
+    }
+  ]
+}
