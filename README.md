@@ -1,7 +1,8 @@
 # Wake on LAN Web Application
 
 ```
-⚠️ Aplicação desenvolvida pelo Github Copilot (*Cloud Sonnet 4*), revisada EM PARTES, e ajustada por mim.
+⚠️ Uma parte considerável desta aplicação foi
+   desenvolvida pelo Github Copilot (Cloud Sonnet 4).
 ```
 
 Uma aplicação web simples para gerenciar Wake on LAN de máquinas em rede local, desenvolvida com Next.js e TypeScript.
