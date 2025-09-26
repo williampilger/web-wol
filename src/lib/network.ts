@@ -28,16 +28,29 @@ export function getClientIp(request: NextRequest): string {
   // Tentar headers de proxy primeiro
   const xForwardedFor = request.headers.get('x-forwarded-for');
   if (xForwardedFor) {
-    return xForwardedFor.split(',')[0].trim();
+    const ip = xForwardedFor.split(',')[0].trim();
+    return normalizeIp(ip);
   }
 
   const xRealIp = request.headers.get('x-real-ip');
   if (xRealIp) {
-    return xRealIp;
+    return normalizeIp(xRealIp);
   }
 
   // Fallback para desenvolvimento local
   return '127.0.0.1';
+}
+
+/**
+ * Normaliza um IP removendo prefixos IPv6 desnecessários
+ */
+function normalizeIp(ip: string): string {
+  // Se for IPv4 mapeado em IPv6, extrair o IPv4
+  if (ip.startsWith('::ffff:')) {
+    return ip.replace('::ffff:', '');
+  }
+  
+  return ip;
 }
 
 /**
@@ -49,10 +62,16 @@ export function isLocalNetwork(ip: string, localNetworks: string[]): boolean {
     return true;
   }
 
+  // Tratar IPv4 mapeado em IPv6 (::ffff:192.168.0.1)
+  let cleanIp = ip;
+  if (ip.startsWith('::ffff:')) {
+    cleanIp = ip.replace('::ffff:', '');
+  }
+
   // Verificar se o IP está em alguma das redes configuradas
   return localNetworks.some(network => {
     try {
-      return isIpInCidr(ip, network);
+      return isIpInCidr(cleanIp, network);
     } catch (error) {
       console.error(`Erro ao verificar CIDR ${network}:`, error);
       return false;
