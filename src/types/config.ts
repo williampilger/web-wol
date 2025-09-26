@@ -27,6 +27,11 @@ export interface Machine {
 
 export interface Config {
   timeout: number;
+  localNetworks: string[]; // CIDRs de redes locais permitidas
+  localUser: {
+    id: string;
+    groups: string[];
+  };
   users: User[];
   groups: Group[];
   machines: Machine[];

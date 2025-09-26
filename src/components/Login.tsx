@@ -94,6 +94,12 @@ export default function Login({ onLogin }: LoginProps) {
           </div>
         </form>
         
+        <div className="mt-4 p-4 bg-blue-50 rounded-md">
+          <p className="text-sm text-blue-800">
+            <strong>ℹ️ Informação:</strong> Usuários da rede local têm acesso automático sem necessidade de login.
+          </p>
+        </div>
+        
         <div className="mt-4 p-4 bg-yellow-50 rounded-md">
           <p className="text-sm text-yellow-800">
             <strong>⚠️ Aviso de Segurança:</strong> Este sistema usa autenticação básica com senhas em texto simples. 

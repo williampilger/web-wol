@@ -13,8 +13,8 @@ Uma aplicação web simples para gerenciar Wake on LAN de máquinas em rede loca
 
 - As senhas são armazenadas em texto simples no arquivo `config.json`
 - Não há criptografia implementada
-- **NUNCA** use esta aplicação em produção ou redes públicas
-- **NUNCA** exponha esta aplicação na internet
+- Não use esta aplicação em produção ou redes públicas sem verificar este código
+- Não exponha esta aplicação na internet sem verificar este código
 
 ## Funcionalidades
 
@@ -110,7 +110,19 @@ npm run build
 npm start
 ```
 
-A aplicação estará disponível em: http://localhost:3000
+### Alterar a porta
+
+Para alterar a porta, veja o `package.json`.
+
+#### ⚠️ Para porta 80 (requer sudo):
+
+Para portas < 1024, é necessário executar com `sudo`.
+
+```bash
+sudo npm run dev   # Desenvolvimento
+sudo npm start     # Produção
+```
+
 
 ## Como usar
 
@@ -126,6 +138,13 @@ A aplicação estará disponível em: http://localhost:3000
 - **dev / dev123**: Acesso apenas ao grupo "desenvolvimento"
 
 ## Configurações
+
+### .env.local
+Arquivo de configurações de ambiente:
+- `PORT=80` - Porta da aplicação
+- `HOSTNAME=0.0.0.0` - Interface de rede
+
+### config.json
 
 ### timeout
 Tempo limite em milissegundos para o ping (padrão: 2000ms)

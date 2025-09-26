@@ -1,5 +1,10 @@
 {
   "timeout": 2000,
+  "localNetworks": ["192.168.0.0/24", "10.0.0.0/8", "172.16.0.0/12"],
+  "localUser": {
+    "id": "Local",
+    "groups": ["escritorio", "desenvolvimento", "servidores", "engenharia"]
+  },
   "users": [
     {
       "id": "admin",

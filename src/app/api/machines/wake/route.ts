@@ -1,8 +1,8 @@
+import { sendWakeOnLan } from '@/lib/wol';
 import { Config } from '@/types/config';
 import fs from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
-import { sendWakeOnLan } from '@/lib/wol';
 
 export async function POST(request: NextRequest) {
   try {
