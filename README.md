@@ -110,6 +110,15 @@ npm run build
 npm start
 ```
 
+### Para colocar para rodar em um `Ubuntu Server` ou algo similar:
+```bash
+# Instalar o gerenciador de apps Node
+sudo npm install pm2 -g
+
+# Colocar pra rodar (dentro da pasta certa, obviamente)
+pm2 start npm --name "web-wol" -- start
+```
+
 #### ⚠️ Para porta 80 (requer sudo):
 
 Para portas < 1024, é necessário executar com `sudo`.
