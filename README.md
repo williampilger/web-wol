@@ -110,10 +110,6 @@ npm run build
 npm start
 ```
 
-### Alterar a porta
-
-Para alterar a porta, veja o `package.json`.
-
 #### ⚠️ Para porta 80 (requer sudo):
 
 Para portas < 1024, é necessário executar com `sudo`.
