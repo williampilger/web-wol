@@ -2,7 +2,7 @@ import { Config } from '@/types/config';
 import fs from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
-import wol from 'wake_on_lan';
+import { sendWakeOnLan } from '@/lib/wol';
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,20 +30,20 @@ export async function POST(request: NextRequest) {
     }
 
     // Enviar Wake on LAN
-    return new Promise<NextResponse>((resolve) => {
-      wol.wake(machine.mac, (error: Error | null) => {
-        if (error) {
-          console.error(`Erro ao enviar WoL para ${machine.name}:`, error);
-          resolve(NextResponse.json({ error: 'Erro ao enviar Wake on LAN' }, { status: 500 }));
-        } else {
-          console.log(`Wake on LAN enviado para ${machine.name} (${machine.mac})`);
-          resolve(NextResponse.json({ 
-            success: true, 
-            message: `Wake on LAN enviado para ${machine.name}` 
-          }));
-        }
+    try {
+      await sendWakeOnLan(machine.mac);
+      console.log(`Wake on LAN enviado para ${machine.name} (${machine.mac})`);
+      
+      return NextResponse.json({ 
+        success: true, 
+        message: `Wake on LAN enviado para ${machine.name}` 
       });
-    });
+    } catch (error) {
+      console.error(`Erro ao enviar WoL para ${machine.name}:`, error);
+      return NextResponse.json({ 
+        error: `Erro ao enviar Wake on LAN: ${error instanceof Error ? error.message : 'Erro desconhecido'}` 
+      }, { status: 500 });
+    }
 
   } catch (error) {
     console.error('Erro ao enviar Wake on LAN:', error);
