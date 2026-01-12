@@ -53,30 +53,38 @@ export function sendWakeOnLan(macAddress: string): Promise<void> {
         try {
           client.setBroadcast(true);
           
-          // Enviar para múltiplas portas para maior compatibilidade
+          // Enviar para múltiplas portas e endereços de broadcast
           const ports = [7, 9]; // Portas padrão Wake on LAN
+          const broadcastAddresses = [
+            '255.255.255.255',  // Broadcast geral
+            '192.168.0.255',    // Broadcast específico da rede 192.168.0.x
+          ];
+          
           let sentCount = 0;
+          const totalSends = ports.length * broadcastAddresses.length;
           let lastError: Error | null = null;
+          let successCount = 0;
 
-          const sendToPort = (port: number) => {
-            client.send(packet, port, '255.255.255.255', (error) => {
+          const sendToPortAndAddress = (port: number, address: string) => {
+            client.send(packet, port, address, (error) => {
               sentCount++;
               
               if (error) {
                 lastError = error;
-                console.error(`Erro ao enviar WoL na porta ${port}:`, error.message);
+                console.error(`Erro ao enviar WoL para ${address}:${port}:`, error.message);
               } else {
-                console.log(`Magic Packet enviado com sucesso para ${macAddress} na porta ${port}`);
+                successCount++;
+                console.log(`Magic Packet enviado com sucesso para ${macAddress} em ${address}:${port}`);
               }
 
-              // Quando tentamos todas as portas
-              if (sentCount === ports.length) {
+              // Quando tentamos todas as combinações
+              if (sentCount === totalSends) {
                 clearTimeout(timeout);
                 client.close();
                 
-                if (lastError && sentCount === ports.length) {
+                if (successCount === 0) {
                   // Se todas falharam
-                  reject(new Error(`Falha ao enviar WoL em todas as portas: ${lastError.message}`));
+                  reject(new Error(`Falha ao enviar WoL em todas as tentativas: ${lastError?.message || 'Erro desconhecido'}`));
                 } else {
                   // Se pelo menos uma funcionou
                   resolve();
@@ -85,8 +93,12 @@ export function sendWakeOnLan(macAddress: string): Promise<void> {
             });
           };
 
-          // Tentar ambas as portas
-          ports.forEach(sendToPort);
+          // Tentar todas as combinações de porta e endereço
+          ports.forEach(port => {
+            broadcastAddresses.forEach(address => {
+              sendToPortAndAddress(port, address);
+            });
+          });
           
         } catch (error) {
           clearTimeout(timeout);
